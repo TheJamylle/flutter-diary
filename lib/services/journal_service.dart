@@ -48,4 +48,10 @@ class JournalService {
         body: body, headers: {'Content-type': 'application/json'});
     return response.statusCode == 200;
   }
+
+  Future<bool> delete(String id) async {
+    http.Response response = await client.delete(Uri.parse('${getUrl()}$id'));
+
+    return response.statusCode == 200;
+  }
 }
