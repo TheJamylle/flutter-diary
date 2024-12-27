@@ -15,7 +15,9 @@ class JournalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (journal != null) {
       return InkWell(
-        onTap: () {},
+        onTap: () {
+          callAddJournalScreen(context, showedDate, journal: journal);
+        },
         child: Container(
           height: 115,
           margin: const EdgeInsets.all(8),
@@ -98,13 +100,25 @@ class JournalCard extends StatelessWidget {
     }
   }
 
-  callAddJournalScreen(BuildContext context, DateTime date) {
+  callAddJournalScreen(BuildContext context, DateTime date, { Journal? journal }) {
+    Journal localJournal = Journal(
+        id: const Uuid().v1(),
+        content: "",
+        createdAt: date,
+        updatedAt: date);
+
+    Map<String, dynamic> map = {};
+    map['isEditing'] = false;
+
+    if (journal != null) {
+      localJournal = journal;
+      map['isEditing'] = true;
+    }
+
+    map['journal'] = localJournal;
+
     Navigator.pushNamed(context, 'add-journal',
-            arguments: Journal(
-                id: const Uuid().v1(),
-                content: "",
-                createdAt: date,
-                updatedAt: date))
+            arguments: map)
         .then((value) {
       if (value != null && value == true) {
         refreshFunction();

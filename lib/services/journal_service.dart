@@ -40,4 +40,12 @@ class JournalService {
 
     return journals;
   }
+
+  Future<bool> edit(String id, Journal journal) async {
+    final body = jsonEncode(journal.toMap());
+
+    http.Response response = await client.put(Uri.parse('${getUrl()}$id'),
+        body: body, headers: {'Content-type': 'application/json'});
+    return response.statusCode == 200;
+  }
 }
