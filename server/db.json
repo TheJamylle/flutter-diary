@@ -1,4 +1,11 @@
 {
+  "users": [
+    {
+      "email": "lala@gmail.com",
+      "password": "$2a$10$SPd9cyVEiHtpPnrvaS8RZeaomIO86ZFUM0IMVn.oxer/BCQ92DjP6",
+      "id": 1
+    }
+  ],
   "journals": [
     {
       "id": "30239bf0-c4a6-11ef-936f-27d6f995f177",

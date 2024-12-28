@@ -18,6 +18,7 @@ dependencies:
   http: ^1.2.2
   http_interceptor: ^2.0.0
   logger: ^2.5.0
+  shared_preferences: ^2.3.4
 
 dev_dependencies:
   flutter_test:
