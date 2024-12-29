@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Future<bool?> showExceptionDialog(BuildContext context,
-    {String title = 'Something wrong happened', required String content}) {
+    {String title = 'Something wrong', required String content}) {
   return showDialog(
       context: context,
       builder: (context) {

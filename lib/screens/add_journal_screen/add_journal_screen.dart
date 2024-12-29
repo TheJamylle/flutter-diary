@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/helpers/logout.dart';
 import 'package:flutter_webapi_first_course/helpers/weekday.dart';
 import 'package:flutter_webapi_first_course/models/journal.dart';
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../common/exception_dialog.dart';
 
 class AddJournalScreen extends StatelessWidget {
   final Journal journal;
@@ -56,14 +60,18 @@ class AddJournalScreen extends StatelessWidget {
               .then((result) => Navigator.pop(context, result))
               .catchError((error) {
             logout(context);
-          }, test: (error) => error is TokenInvalidException);
+          }, test: (error) => error is TokenInvalidException).catchError((error) {
+            showExceptionDialog(context, content: 'Server error');
+          }, test: (error) => error is TimeoutException);
         } else {
           service
               .register(journal, token)
               .then((result) => Navigator.pop(context, result))
               .catchError((error) {
             logout(context);
-          }, test: (error) => error is TokenInvalidException);
+          }, test: (error) => error is TokenInvalidException).catchError((error) {
+            showExceptionDialog(context, content: 'Server error');
+          }, test: (error) => error is TimeoutException);
         }
       }
     });

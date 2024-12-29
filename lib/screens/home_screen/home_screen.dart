@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -112,6 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }, test: (error) => error is TokenInvalidException).catchError((error) {
       var innerError = error as HttpException;
       showExceptionDialog(context, content: innerError.message);
-    }, test: (error) => error is HttpException);
+    }, test: (error) => error is HttpException).catchError((error) {
+      showExceptionDialog(context, content: 'Server error');
+    }, test: (error) => error is TimeoutException);
   }
 }

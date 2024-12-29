@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -77,7 +78,9 @@ class LoginScreen extends StatelessWidget {
 
     service.login(email: email, password: password).then((result) => {
           if (result['success'] && result['content'] == null)
-            {Navigator.pushNamed(context, "home")}
+            {
+              Navigator.pushNamed(context, "home")
+            }
           else if (result['content'] != null &&
               result['content'] == 'Cannot find user')
             {
@@ -114,6 +117,8 @@ class LoginScreen extends StatelessWidget {
         }).catchError((error) {
           var innerError = error as HttpException;
           showExceptionDialog(context, content: innerError.message);
-    }, test: (error) => error is HttpException);
+    }, test: (error) => error is HttpException).catchError((error) {
+      showExceptionDialog(context, content: 'Server error');
+    }, test: (error) => error is TimeoutException);
   }
 }
