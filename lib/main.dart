@@ -2,15 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/screens/add_journal_screen/add_journal_screen.dart';
 import 'package:flutter_webapi_first_course/screens/login_screen/login_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'models/journal.dart';
 import 'screens/home_screen/home_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool isLogged = await verifyToken();
+
+  runApp(MyApp(isLoggedIn: isLogged));
+}
+
+Future<bool> verifyToken() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String? token = preferences.getString('accessToken');
+
+  return token != null;
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool isLoggedIn;
+
+  MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +54,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.cyan[800],
               titleTextStyle: const TextStyle(color: Colors.white))),
       themeMode: ThemeMode.light,
-      initialRoute: "home",
+      initialRoute: isLoggedIn ? "home" : "login",
       routes: {
         "home": (context) => const HomeScreen(),
         "login": (context) => LoginScreen()

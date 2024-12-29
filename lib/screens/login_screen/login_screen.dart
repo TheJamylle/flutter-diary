@@ -72,7 +72,9 @@ class LoginScreen extends StatelessWidget {
     String password = _passwordController.text;
 
     try {
-      bool result = await service.login(email: email, password: password);
+      await service.login(email: email, password: password).then((result) => {
+            if (result) {Navigator.pushNamed(context, 'home')}
+          });
     } on UserNotFoundException {
       showConfirmationDialog(context,
               content:
@@ -81,11 +83,14 @@ class LoginScreen extends StatelessWidget {
           .then((value) {
         if (value != null && value) {
           service.register(email: email, password: password).then((valueR) => {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Cadastrado com sucesso'),
-                  backgroundColor: Colors.green,
-                ))
-              });
+            if (valueR) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Cadastrado com sucesso'),
+                backgroundColor: Colors.green,
+              )),
+              Navigator.pushNamed(context, 'home')
+            }
+          });
         }
       });
     }
