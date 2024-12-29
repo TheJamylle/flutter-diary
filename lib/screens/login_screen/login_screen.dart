@@ -76,7 +76,7 @@ class LoginScreen extends StatelessWidget {
           if (result['success'] && result['content'] == null)
             {Navigator.pushNamed(context, "home")}
           else if (result['content'] != null &&
-              result['content'] == 'User not found')
+              result['content'] == 'Cannot find user')
             {
               showConfirmationDialog(context,
                       content:

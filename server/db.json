@@ -4,6 +4,11 @@
       "email": "lala@gmail.com",
       "password": "$2a$10$SPd9cyVEiHtpPnrvaS8RZeaomIO86ZFUM0IMVn.oxer/BCQ92DjP6",
       "id": 1
+    },
+    {
+      "email": "sss@a.com",
+      "password": "$2a$10$Rdrei4j1vq03sCH8DFjnA.EFDNwuDFiB/I3j.ViY73bwi.JvTQPb6",
+      "id": 2
     }
   ],
   "journals": [
@@ -13,6 +18,13 @@
       "content": "ggkkk",
       "createdAt": "2024-12-19 11:53:14.696599",
       "updatedAt": "2024-12-19 11:53:14.696599"
+    },
+    {
+      "id": "fe922690-c5dd-11ef-9702-a39eeced900d",
+      "userId": 2,
+      "content": "aaaaa",
+      "createdAt": "2024-12-24 12:11:05.541133",
+      "updatedAt": "2024-12-24 12:11:05.541133"
     }
   ]
 }

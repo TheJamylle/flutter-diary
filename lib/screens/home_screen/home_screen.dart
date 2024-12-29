@@ -60,11 +60,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   database: database,
                   refresh: refresh,
                   userId: userId!,
-              token: userToken!),
+                  token: userToken!),
             )
           : const Center(
               child: CircularProgressIndicator(),
             ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+                onTap: () {
+                  logout();
+                },
+                title: const Text('Logout'),
+                leading: const Icon(Icons.logout))
+          ],
+        ),
+      ),
     );
   }
 
@@ -91,6 +103,13 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         Navigator.pushNamed(context, 'login');
       }
+    });
+  }
+
+  logout() {
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.clear();
+      Navigator.pushReplacementNamed(context, 'login');
     });
   }
 }
