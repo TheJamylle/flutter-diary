@@ -12,24 +12,24 @@ class AuthService {
   http.Client client =
   InterceptedClient.build(interceptors: [LoggerInterceptor()]);
 
-  Future<bool> login({ required String email, required String password }) async {
+  Future<Map<String, dynamic>> login({ required String email, required String password }) async {
     http.Response response = await client.post(Uri.parse('${url}login'), body: {
       'email': email,
       'password': password
     });
 
+    Map<String, dynamic> validation = <String, dynamic>{};
+
     if (response.statusCode != 200) {
+      validation['success'] = false;
       String content = jsonDecode(response.body);
-      switch (content) {
-        case "Cannot find user":
-          throw UserNotFoundException();
-      }
-      throw HttpException(response.body);
+      validation['content'] = content;
     }
+    validation['success'] = true;
 
     saveUserInfos(response.body);
 
-    return true;
+    return validation;
   }
 
   Future<bool> register({ required String email, required String password }) async {

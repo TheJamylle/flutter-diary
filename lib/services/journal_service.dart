@@ -23,8 +23,10 @@ class JournalService {
     return response.statusCode == 201;
   }
 
-  Future<List<Journal>> getAll() async {
-    http.Response response = await client.get(Uri.parse(getUrl()));
+  Future<List<Journal>> getAll({required String id, required String token}) async {
+    http.Response response = await client.get(Uri.parse("${url}users/$id/journals"), headers: {
+      'Authorization': 'Bearer $token'
+    });
 
     List<Journal> journals = [];
 
