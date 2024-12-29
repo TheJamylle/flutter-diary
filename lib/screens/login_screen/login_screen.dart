@@ -72,38 +72,42 @@ class LoginScreen extends StatelessWidget {
     String password = _passwordController.text;
     String error = '';
 
-    try {
-      await service.login(email: email, password: password).then((result) => {
-            if (result['success'] && result['content'] == null)
-              {Navigator.pushNamed(context, 'home')}
-            else
-              {
-                error = result["content"],
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(error),
-                  backgroundColor: Colors.red,
-                ))
-              }
-          });
-    } on UserNotFoundException {
-      showConfirmationDialog(context,
-              content:
-                  'Deseja criar um novo usuário com o email $email e senha?',
-              confirmOption: 'Criar')
-          .then((value) {
-        if (value != null && value) {
-          service.register(email: email, password: password).then((valueR) => {
-                if (valueR)
-                  {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Cadastrado com sucesso'),
-                      backgroundColor: Colors.green,
-                    )),
-                    Navigator.pushNamed(context, 'home')
-                  }
-              });
-        }
-      });
-    }
+    await service.login(email: email, password: password).then((result) => {
+          if (result['success'] && result['content'] == null)
+            {Navigator.pushNamed(context, "home")}
+          else if (result['content'] != null &&
+              result['content'] == 'User not found')
+            {
+              showConfirmationDialog(context,
+                      content:
+                          'Deseja criar um novo usuário com o email $email e senha?',
+                      confirmOption: 'Criar')
+                  .then((value) {
+                if (value != null && value) {
+                  service
+                      .register(email: email, password: password)
+                      .then((valueR) => {
+                            if (valueR)
+                              {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text('Cadastrado com sucesso'),
+                                  backgroundColor: Colors.green,
+                                )),
+                                Navigator.pushNamed(context, 'home')
+                              }
+                          });
+                }
+              })
+            }
+          else
+            {
+              error = result["content"],
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(error),
+                backgroundColor: Colors.red,
+              ))
+            }
+        });
   }
 }

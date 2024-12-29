@@ -7,5 +7,12 @@
     }
   ],
   "journals": [
+    {
+      "id": "82dc7390-c5db-11ef-9702-a39eeced900d",
+      "userId": 1,
+      "content": "ggkkk",
+      "createdAt": "2024-12-19 11:53:14.696599",
+      "updatedAt": "2024-12-19 11:53:14.696599"
+    }
   ]
 }
