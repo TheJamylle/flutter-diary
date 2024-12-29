@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_webapi_first_course/helpers/logout.dart';
 import 'package:flutter_webapi_first_course/helpers/weekday.dart';
 import 'package:flutter_webapi_first_course/models/journal.dart';
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
@@ -17,9 +18,13 @@ class AddJournalScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(onPressed: () {
-          registerJournal(context);
-        }, icon: const Icon(Icons.check))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                registerJournal(context);
+              },
+              icon: const Icon(Icons.check))
+        ],
         title: Text(
             "${WeekDay(journal.createdAt.weekday).long.toLowerCase()}, ${journal.createdAt.day}  |  ${journal.createdAt.month}  |  ${journal.createdAt.year}"),
       ),
@@ -46,9 +51,19 @@ class AddJournalScreen extends StatelessWidget {
 
         JournalService service = JournalService();
         if (isEditing) {
-          service.edit(journal.id, journal, token).then((result) => Navigator.pop(context, result));
+          service
+              .edit(journal.id, journal, token)
+              .then((result) => Navigator.pop(context, result))
+              .catchError((error) {
+            logout(context);
+          }, test: (error) => error is TokenInvalidException);
         } else {
-          service.register(journal, token).then((result) => Navigator.pop(context, result));
+          service
+              .register(journal, token)
+              .then((result) => Navigator.pop(context, result))
+              .catchError((error) {
+            logout(context);
+          }, test: (error) => error is TokenInvalidException);
         }
       }
     });

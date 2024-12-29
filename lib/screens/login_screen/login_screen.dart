@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/screens/common/confirmation_dialog.dart';
+import 'package:flutter_webapi_first_course/screens/common/exception_dialog.dart';
 import 'package:flutter_webapi_first_course/services/auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -72,7 +75,7 @@ class LoginScreen extends StatelessWidget {
     String password = _passwordController.text;
     String error = '';
 
-    await service.login(email: email, password: password).then((result) => {
+    service.login(email: email, password: password).then((result) => {
           if (result['success'] && result['content'] == null)
             {Navigator.pushNamed(context, "home")}
           else if (result['content'] != null &&
@@ -108,6 +111,9 @@ class LoginScreen extends StatelessWidget {
                 backgroundColor: Colors.red,
               ))
             }
-        });
+        }).catchError((error) {
+          var innerError = error as HttpException;
+          showExceptionDialog(context, content: innerError.message);
+    }, test: (error) => error is HttpException);
   }
 }

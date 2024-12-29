@@ -5,6 +5,8 @@ import 'package:flutter_webapi_first_course/screens/common/confirmation_dialog.d
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../helpers/logout.dart';
+
 class JournalCard extends StatelessWidget {
   final Journal? journal;
   final DateTime showedDate;
@@ -169,7 +171,10 @@ class JournalCard extends StatelessWidget {
                         })
                       }
                   }
-              });
+              })
+          .catchError((error) {
+        logout(context);
+      }, test: (error) => error is TokenInvalidException);
     }
   }
 }

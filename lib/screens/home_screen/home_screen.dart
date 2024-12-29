@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/screens/home_screen/widgets/home_screen_list.dart';
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../helpers/logout.dart';
 import '../../models/journal.dart';
+import '../common/exception_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -70,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             ListTile(
                 onTap: () {
-                  logout();
+                  logout(context);
                 },
                 title: const Text('Logout'),
                 leading: const Icon(Icons.logout))
@@ -103,13 +107,11 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         Navigator.pushNamed(context, 'login');
       }
-    });
-  }
-
-  logout() {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.clear();
-      Navigator.pushReplacementNamed(context, 'login');
-    });
+    }).catchError((error) {
+      logout(context);
+    }, test: (error) => error is TokenInvalidException).catchError((error) {
+      var innerError = error as HttpException;
+      showExceptionDialog(context, content: innerError.message);
+    }, test: (error) => error is HttpException);
   }
 }

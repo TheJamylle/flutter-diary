@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_webapi_first_course/models/journal.dart';
 import 'package:flutter_webapi_first_course/services/http_interceptors.dart';
@@ -24,6 +25,14 @@ class JournalService {
           'Content-type': 'application/json',
           'Authorization': 'Bearer $token'
         });
+
+    if (response.statusCode != 201) {
+      if (jsonDecode(response.body) == 'jwt expired') {
+        throw TokenInvalidException();
+      }
+      throw HttpException(response.body);
+    }
+
     return response.statusCode == 201;
   }
 
@@ -36,7 +45,10 @@ class JournalService {
     List<Journal> journals = [];
 
     if (response.statusCode != 200) {
-      throw Exception();
+      if (jsonDecode(response.body) == 'jwt expired') {
+        throw TokenInvalidException();
+      }
+      throw HttpException(response.body);
     }
 
     List<dynamic> result = jsonDecode(response.body);
@@ -57,12 +69,29 @@ class JournalService {
           'Content-type': 'application/json',
           'Authorization': 'Bearer $token'
         });
+
+    if (response.statusCode != 200) {
+      if (jsonDecode(response.body) == 'jwt expired') {
+        throw TokenInvalidException();
+      }
+      throw HttpException(response.body);
+    }
+
     return response.statusCode == 200;
   }
 
   Future<bool> delete(String id, String token) async {
     http.Response response = await client.delete(Uri.parse('${getUrl()}$id'), headers: { "Authorization": 'Bearer ${token}' });
 
+    if (response.statusCode != 200) {
+      if (jsonDecode(response.body) == 'jwt expired') {
+        throw TokenInvalidException();
+      }
+      throw HttpException(response.body);
+    }
+
     return response.statusCode == 200;
   }
 }
+
+class TokenInvalidException implements Exception{}

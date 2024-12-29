@@ -60,5 +60,3 @@ class AuthService {
     preferences.setInt('id', id);
   }
 }
-
-class UserNotFoundException implements Exception{}
