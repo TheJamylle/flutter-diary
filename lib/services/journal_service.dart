@@ -10,7 +10,7 @@ class JournalService {
   http.Client client = WebClient().client;
 
   String getUrl() {
-    return "${url}journals";
+    return "${url}journals/";
   }
 
   Future<bool> register(Journal journal, String token) async {
@@ -57,6 +57,7 @@ class JournalService {
   }
 
   Future<bool> edit(String id, Journal journal, String token) async {
+    journal.updatedAt = DateTime.now();
     final body = jsonEncode(journal.toMap());
 
     http.Response response = await client.put(Uri.parse('${getUrl()}$id'),
@@ -77,7 +78,7 @@ class JournalService {
   }
 
   Future<bool> delete(String id, String token) async {
-    http.Response response = await client.delete(Uri.parse('${getUrl()}$id'), headers: { "Authorization": 'Bearer ${token}' });
+    http.Response response = await client.delete(Uri.parse('${getUrl()}$id'), headers: { "Authorization": 'Bearer $token' });
 
     if (response.statusCode != 200) {
       if (jsonDecode(response.body) == 'jwt expired') {

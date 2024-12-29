@@ -11,7 +11,7 @@ class LoginScreen extends StatelessWidget {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  AuthService service = AuthService();
+  final AuthService service = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                     "Simple Journal",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  const Text("por Alura",
+                  const Text("por Jamylle",
                       style: TextStyle(fontStyle: FontStyle.italic)),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
